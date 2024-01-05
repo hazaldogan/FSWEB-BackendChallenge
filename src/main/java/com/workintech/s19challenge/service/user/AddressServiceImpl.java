@@ -27,7 +27,7 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public Address findbyId(long id) {
+    public Address findById(long id) {
         Optional<Address> optionalAddress = addressRepository.findById(id);
         if(optionalAddress.isPresent()){
             return optionalAddress.get();
@@ -42,7 +42,7 @@ public class AddressServiceImpl implements AddressService{
 
     @Override
     public Address delete(long id) {
-        Address address = findbyId(id);
+        Address address = findById(id);
         if(address != null){
             addressRepository.delete(address);
             return address;

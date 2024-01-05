@@ -1,9 +1,13 @@
 package com.workintech.s19challenge.entity.product;
 
+import com.workintech.s19challenge.entity.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -39,5 +43,17 @@ public class Product {
 
     @Column(name="sell_count")
     private long sellCount;
+
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @JoinTable(name="order_detail",schema="ecommerce",joinColumns = @JoinColumn(name="product_id"),
+            inverseJoinColumns = @JoinColumn(name="order_id"))
+    private List<Order> orderList;
+
+    public void addOrder(Order order){
+        if(orderList == null){
+            orderList = new ArrayList<>();
+        }
+        orderList.add(order);
+    }
 
 }

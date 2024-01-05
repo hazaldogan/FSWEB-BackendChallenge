@@ -1,5 +1,8 @@
 package com.workintech.s19challenge.controller.user;
 
+import com.workintech.s19challenge.dto.user.AddressResponseWithOrder;
+import com.workintech.s19challenge.dto.user.UserResponseWithAddress;
+import com.workintech.s19challenge.entity.order.Order;
 import com.workintech.s19challenge.entity.user.Address;
 import com.workintech.s19challenge.entity.user.User;
 import com.workintech.s19challenge.exception.GlobalException;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -32,8 +36,15 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
-    public Address findById(@Positive @PathVariable long id){
-        return addressService.findbyId(id);
+    public AddressResponseWithOrder findById(@Positive @PathVariable long id){
+        Address address = addressService.findById(id);
+        List<Order> orderList = new ArrayList<>();
+        address.getOrderList().forEach(order -> {
+            orderList.add(order);
+        });
+        return new AddressResponseWithOrder(address.getId(), address.getTitle(), address.getName(),
+                address.getSurname(), address.getPhone(), address.getCity(), address.getDistrict(),
+                address.getNeighbourhood(), address.getAddress(), orderList);
     }
 
     @PostMapping("/{userId}")
@@ -70,7 +81,7 @@ public class AddressController {
 
     @DeleteMapping("/{id}")
     public Address delete(@Positive @PathVariable long id){
-        Address address = addressService.findbyId(id);
+        Address address = addressService.findById(id);
         if(address != null){
             addressService.delete(id);
             return address;

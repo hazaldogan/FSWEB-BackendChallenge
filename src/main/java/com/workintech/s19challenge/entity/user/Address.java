@@ -1,10 +1,13 @@
 package com.workintech.s19challenge.entity.user;
 
+import com.workintech.s19challenge.entity.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -51,4 +54,14 @@ public class Address {
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name="user_id")
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "address")
+    private List<Order> orderList;
+
+    public void addOrder(Order order){
+        if(orderList != null){
+            orderList = new ArrayList<>();
+        }
+        orderList.add(order);
+    }
 }
