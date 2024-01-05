@@ -4,5 +4,5 @@ import com.workintech.s19challenge.entity.product.Product;
 
 import java.util.List;
 
-public record CategoryResponseWithProduct(long id, String name, char gender, List<Product> productList) {
+public record CategoryResponseWithProduct(long id, String name, char gender, List<ProductResponse> productList) {
 }
