@@ -53,13 +53,17 @@ public class SecurityConfig {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/product/**")
-                            .hasAnyAuthority("Admin", "Store","Customer");
                     auth.requestMatchers(HttpMethod.POST, "/product/**")
                             .hasAnyAuthority("Admin","Store");
                     auth.requestMatchers(HttpMethod.PUT, "/product/**")
                             .hasAnyAuthority("Admin","Store");
                     auth.requestMatchers(HttpMethod.DELETE, "/product/**")
+                            .hasAnyAuthority("Admin","Store");
+                    auth.requestMatchers(HttpMethod.POST, "/category/**")
+                            .hasAnyAuthority("Admin","Store");
+                    auth.requestMatchers(HttpMethod.PUT, "/category/**")
+                            .hasAnyAuthority("Admin","Store");
+                    auth.requestMatchers(HttpMethod.DELETE, "/category/**")
                             .hasAnyAuthority("Admin","Store");
                     auth.requestMatchers("/user/**").hasAuthority("Admin");
                     auth.requestMatchers("/address/**").hasAuthority("Customer");

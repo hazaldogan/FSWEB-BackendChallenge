@@ -31,8 +31,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> findAll(){
-        return categoryService.findAll();
+    public List<CategoryResponse> findAll(){
+        List<Category> categoryList = categoryService.findAll();
+        List<CategoryResponse> newList = new ArrayList<>();
+        categoryList.forEach(category -> {
+            newList.add(new CategoryResponse(category.getId(), category.getTitle(), category.getGender()));
+        });
+        return newList;
     }
 
     @GetMapping("/{id}")

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,8 +26,14 @@ public class ProductController {
     }
     
     @GetMapping
-    public List<Product> findAll(){
-        return productService.findAll();
+    public List<ProductResponse> findAll(){
+        List<Product> productList = productService.findAll();
+        List<ProductResponse> newList = new ArrayList<>();
+        productList.forEach(product -> {
+            newList.add(new ProductResponse(product.getId(), product.getName(), product.getDescription(),
+                    product.getPrice(), product.getStock(), product.getRating()));
+        });
+        return newList;
     }
     
     @GetMapping("/{id}")
