@@ -1,5 +1,6 @@
 package com.workintech.s19challenge.controller.user;
 
+import com.workintech.s19challenge.dto.user.AddressResponse;
 import com.workintech.s19challenge.dto.user.AddressResponseWithOrder;
 import com.workintech.s19challenge.dto.user.UserResponseWithAddress;
 import com.workintech.s19challenge.entity.order.Order;
@@ -48,7 +49,7 @@ public class AddressController {
     }
 
     @PostMapping("/{userId}")
-    public Address save(@Validated @PathVariable long userId, @RequestBody Address address){
+    public AddressResponse save(@Validated @PathVariable long userId, @RequestBody Address address){
         User user = userCrudService.findById(userId);
         if(user != null){
             user.getAddresses().add(address);
@@ -57,7 +58,9 @@ public class AddressController {
         }else{
             throw new GlobalException("User is not found with id: " + userId, HttpStatus.NOT_FOUND);
         }
-        return address;
+        return new AddressResponse(address.getId(), address.getTitle(), address.getName(), address.getSurname(),
+                address.getPhone(), address.getCity(), address.getDistrict(), address.getNeighbourhood(),
+                address.getAddress());
     }
 
     @PutMapping("/{userId}")
