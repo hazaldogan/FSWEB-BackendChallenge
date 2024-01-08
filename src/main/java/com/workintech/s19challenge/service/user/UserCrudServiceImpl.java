@@ -36,6 +36,11 @@ public class UserCrudServiceImpl implements UserCrudService{
 
     @Override
     public User save(User user) {
+        Optional<User> optionalUser = userRepository.findUserByEmail(user.getEmail());
+        if(optionalUser.isPresent()){
+            User foundUser = userRepository.findUserByEmail(user.getEmail()).get();
+            throw new GlobalException("User with given email already exist: ",HttpStatus.BAD_REQUEST);
+        }
         return userRepository.save(user);
     }
 
