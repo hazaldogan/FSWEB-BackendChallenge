@@ -39,18 +39,15 @@ public class OrderController {
     }
 
     @PostMapping("/{addressId}")
-    public OrderResponse save(@PathVariable long addressId, @RequestBody OrderRequest orderRequest){
+    public OrderResponse save(@PathVariable long addressId, @RequestBody Order order){
         Address address = addressService.findById(addressId);
-
-        List<Product> productList = orderRequest.getProductList();
-        Order order = orderRequest.getOrder();
-        for(Product product:productList){
-            order.addProduct(product);
-        }
-
         if(address != null){
             address.getOrderList().add(order);
             order.setAddress(address);
+            List<Product> productList = order.getProductList();
+            for(Product product:productList){
+                order.addProduct(product);
+            }
             orderService.save(order);
         }else{
             throw new GlobalException("Order is not found with id: " + addressId, HttpStatus.NOT_FOUND);
